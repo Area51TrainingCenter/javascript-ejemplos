@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Promesas</title>
+	<meta charset="utf-8">
+</head>
+<body>
+
+
+<script src="q.js"></script>
+
+<script>
+// Promesas finales que serán evaluadas antes de avisar la apertura de las tiendas
+var diferidoTomarMedidas = Q.defer()
+var diferidoSolicitarAProveedores = Q.defer()
+var diferidoResponderCorreo = Q.defer()
+var diferidoRevisarLimpiezaPersonal = Q.defer()
+	
+
+//////////////////////////////////////////////
+// TAREA 1
+// Obtener el reporte de incidencias 
+// y tomar las medidas correspondientes
+//////////////////////////////////////////////
+function tomarMedidas(){
+     setTimeout(function(){
+        diferidoTomarMedidas.resolve("Se tomaron las medidas.")
+     }, 2000)
+     return diferidoTomarMedidas.promise
+}
+
+function obtenerReporteIncidentes(){
+	var deferred = Q.defer()
+	
+	setTimeout(function(){
+		deferred.resolve("Se obtuvo el reporte de incidentes.")
+	}, 2000)
+	return deferred.promise	
+}
+
+obtenerReporteIncidentes()
+	.then(tomarMedidas())
+	.then(function(){
+		console.log("Tarea 1: Cadena de promesas cumplidas.")
+	})
+	.catch(function(){
+		console.log("Tarea 1: No se cumplió la cadena de promesas")
+	})
+
+
+//////////////////////////////////////////////
+// TAREA 2
+// Obtener el reporte de inventario y 
+// solicitar al proveedor lo que falte
+//////////////////////////////////////////////
+function solicitarAProveedores(){
+     setTimeout(function(){
+        diferidoSolicitarAProveedores.resolve("Se solicitó a proveedores.")
+     }, 2000)
+     return diferidoSolicitarAProveedores.promise
+}
+
+function obtenerReporteInventario(){
+	var deferred = Q.defer()
+	
+	setTimeout(function(){
+		deferred.resolve("Se obtuvo el reporte de inventario.")
+	}, 2000)
+	return deferred.promise	
+}
+
+obtenerReporteInventario()
+	.then(solicitarAProveedores())
+	.then(function(){
+		console.log("Tarea 2: Cadena de promesas cumplidas.")
+	})
+	.catch(function(){
+		console.log("Tarea 2: No se cumplió la cadena de promesas")
+	})	
+
+
+
+//////////////////////////////////////////////
+// TAREA 3
+// Revisar el correo y responderlo
+//////////////////////////////////////////////
+function responderCorreo(){
+     setTimeout(function(){
+        diferidoSolicitarAProveedores.resolve("Se respondió el correo.")
+     }, 2000)
+     return diferidoSolicitarAProveedores.promise
+}
+
+function revisarCorreo(){
+	setTimeout(function(){
+		diferidoResponderCorreo.resolve("Se revisó el correo.")
+	}, 2000)
+	return diferidoResponderCorreo.promise	
+}
+
+revisarCorreo()
+	.then(responderCorreo())
+	.then(function(){
+		console.log("Tarea 3: Cadena de promesas cumplidas.")
+	})
+	.catch(function(){
+		console.log("Tarea 3: No se cumplió la cadena de promesas")
+	})
+
+
+//////////////////////////////////////////////
+// TAREA 4
+// Revisar la limpieza de los locales y que
+// el personal esté correctamente uniformado
+//////////////////////////////////////////////
+function revisarLimpiezaPersonal(){
+	setTimeout(function(){
+		diferidoRevisarLimpiezaPersonal.resolve("Se revisó la limpieza y al personal.")
+	}, 2000)
+	return diferidoRevisarLimpiezaPersonal.promise	
+}
+
+revisarLimpiezaPersonal()
+	.then(function(){
+		console.log("Tarea 4: Promesa cumplida.")
+	})
+	.catch(function(){
+		console.log("Tarea 4: No se cumplió la promesa.")
+	})
+
+
+
+//////////////////////////////////////////////
+// TAREA 5
+// Avisa a los locales que pueden abrir
+// las puertas
+//////////////////////////////////////////////
+function avisarApertura(){
+	console.log("apertura")
+}
+
+
+
+// Verifica que las promesas se han cumplido para avisar la apertura de las tiendas
+Q.all(
+	   [
+	       diferidoTomarMedidas.promise,
+	       diferidoSolicitarAProveedores.promise,
+	       diferidoResponderCorreo.promise,
+	       diferidoRevisarLimpiezaPersonal.promise
+	   ])
+	   .then(function(){
+	       avisarApertura()
+	       console.log("Promesas cumplidas.")
+	   })
+	  .catch(function(){
+	       console.log("Las promesas no se cumplieron.")
+	  })
+
+</script>
+
+</body>
+</html>
